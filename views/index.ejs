@@ -1,44 +1,50 @@
 <!doctype html>
 <html>
 <head>
-<title>TODO list</title>
+    <title>TODO list</title>
 
-<style>
-body {
-width:900px;
-margin:auto;
-}
+    <style>
+    body {
+        width:900px;
+        margin:auto;
+    }
 
-section {
-background:#EEE;
-display:inline-block;
-width: 500px;
-}
+    section {
+        background:#EEE;
+        display:inline-block;
+        width: 500px;
+    }
 
 
-</style>
+    </style>
 
 
 </head>
 
 <body>
-<h1>The To-Do list</h1>
+    <h1>The To-Do list</h1>
 
-<section>
-<h2>Today</h2>
-<div class="list">
-
-<ul>
-<li>tache 1</li>
-<li>tache 2</li>
-</ul>
-
-</div>
-<form action="#" method="post">
-<input type="text" name=""/>
-<input type="submit" value="new task"/>
-</form>
-</section>
+    <section>
+        <h2>Today</h2>
+        <div class="list">
+            <% if (todos.length) { %>
+            <ul>
+                <% for (var i in todos) { %>
+                    <li>
+                        <%= todos[i].title %>
+                        <a href="/delete?id=<%= todos[i].id %>">X</a>
+                    </li>
+                <% } %>
+            </ul>
+            <% } else { %>
+                <p>You have no todo yet.</p>
+            <% } %>
+        </div>
+        <form action="/insert" method="post">
+            <input type="text" name="task"/>
+            <input type="submit" value="new task"/>
+        </form>
+    </section>
 
 
 </body>
