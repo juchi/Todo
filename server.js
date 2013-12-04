@@ -21,7 +21,7 @@ app.post('/insert', function(req, res) {
     res.send(302, '');
 });
 
-app.all('/delete', function(req, res) {
+app.post('/delete', function(req, res) {
     var id = req.body.id;
     if (id == undefined) {
         id = req.query.id;
@@ -29,8 +29,13 @@ app.all('/delete', function(req, res) {
     if (list[id] != undefined) {
         list.splice(id, 1);
     }
-    res.setHeader('Location', '/');
-    res.send(302, '');
+    if (req.xhr) {
+        res.setHeader('Content-Type', 'text/plain');
+        res.send(200, '');
+    } else {
+        res.setHeader('Location', '/');
+        res.send(302, '');
+    }
 });
 
 // JS and CSS files

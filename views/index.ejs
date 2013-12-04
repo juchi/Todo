@@ -14,9 +14,9 @@
             <% if (todos.length) { %>
             <ul>
                 <% for (var i in todos) { %>
-                    <li>
+                    <li id="todo<%= todos[i].id %>">
                         <%= todos[i].title %>
-                        <a href="/delete?id=<%= todos[i].id %>">X</a>
+                        <a href="#" onclick="deleteElement(<%= todos[i].id %>); return false;">X</a>
                     </li>
                 <% } %>
             </ul>
@@ -30,6 +30,7 @@
         </form>
     </section>
 
-
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script type="text/javascript" src="/assets/scripts.js"></script>
 </body>
 </html>
