@@ -1,0 +1,10 @@
+body {
+    width:900px;
+    margin:auto;
+}
+
+section {
+    background:#EEE;
+    display:inline-block;
+    width: 500px;
+}
