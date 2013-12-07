@@ -16,7 +16,7 @@ app.get('/', function(req, res) {
 
 app.post('/insert', function(req, res) {
     var todo = {id:++lastid, title:req.body.task};
-    list[lastid] = todo;
+    list.push(todo);
     res.setHeader('Location', '/');
     res.send(302, '');
 });
@@ -26,8 +26,11 @@ app.post('/delete', function(req, res) {
     if (id == undefined) {
         id = req.query.id;
     }
-    if (list[id] != undefined) {
-        list.splice(id, 1);
+    for (var i in list) {
+        if (list[i].id == id) {
+            list.splice(i, 1);
+            break;
+        }
     }
     if (req.xhr) {
         res.setHeader('Content-Type', 'text/plain');
