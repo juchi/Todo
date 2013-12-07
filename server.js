@@ -2,22 +2,24 @@ var http = require('http');
 var ejs = require('ejs');
 var express = require('express');
 var fs = require('fs');
-var storage = require('./storage.js');
+var storage = require('./storage');
 
 var app = express();
 app.use(express.bodyParser());
 
 app.get('/', function(req, res) {
-    var list = storage.getAllTasks();
-    res.setHeader('Content-Type', 'text/html');
-    res.render('index.ejs', {todos: list});
+    storage.getAllTasks(function(tasks){
+        res.setHeader('Content-Type', 'text/html');
+        res.render('index.ejs', {todos: tasks});
+    });
 });
 
 app.post('/insert', function(req, res) {
     var todo = {id:null, title:req.body.task};
-    storage.addTask(todo);
-    res.setHeader('Location', '/');
-    res.send(302, '');
+    storage.addTask(todo, function() {
+        res.setHeader('Location', '/');
+        res.send(302, '');
+    });
 });
 
 app.post('/delete', function(req, res) {
@@ -25,14 +27,16 @@ app.post('/delete', function(req, res) {
     if (id == undefined) {
         id = req.query.id;
     }
-    storage.removeTask(id);
-    if (req.xhr) {
-        res.setHeader('Content-Type', 'text/plain');
-        res.send(200, '');
-    } else {
-        res.setHeader('Location', '/');
-        res.send(302, '');
-    }
+    storage.removeTask(id, function(){
+        if (req.xhr) {
+            res.setHeader('Content-Type', 'text/plain');
+            res.send(200, '');
+        } else {
+            res.setHeader('Location', '/');
+            res.send(302, '');
+        }
+    });
+    
 });
 
 // JS and CSS files
