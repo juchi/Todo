@@ -2,7 +2,7 @@
     <section class="timezone" data-timezone="<%= time %>" ondragover="dragOver(event);" ondrop="drop(event)">
         <h2><%= time %></h2>
         <% if (todos[time].length) { %>
-            <ul>
+            <ul class="list">
                 <% for (var i in todos[time]) { %>
                     <% var todo=todos[time][i] %>
                     <li id="todo<%= todo.id %>" draggable="true" ondragstart="startDrag(<%= todo.id %>, event)">
@@ -14,10 +14,12 @@
         <% } else { %>
         <p>You have no todos yet.</p>
         <% } %>
-        <form action="/insert" method="post">
-            <input type="hidden" name="timezone" value="<%= time %>"/>
-            <input type="text" name="task"/>
-            <input type="submit" value="new task"/>
-        </form>
+        <div class="newtask">
+            <form action="/insert" method="post">
+                <input type="hidden" name="timezone" value="<%= time %>"/>
+                <input type="text" name="task"/>
+                <input type="submit" value="new task"/>
+            </form>
+        </div>
     </section>
 <% } %>

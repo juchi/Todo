@@ -31,7 +31,6 @@ function drop(event) {
         return;
     }
     var timezone = event.target.dataset.timezone;
-    console.log(timezone);
     var id = event.dataTransfer.getData('task');
     var todo = document.getElementById('todo'+id);
     jQuery(event.target).children('ul').append(todo);

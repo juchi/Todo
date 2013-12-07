@@ -4,7 +4,8 @@ body {
 }
 
 .timezone {
-    background:#EEE;
+    background:#FFFBF5;
+    box-shadow:0 0 10px 0 #CCC;
     display:inline-block;
     margin: 0 10px;
     vertical-align: top;
@@ -12,5 +13,27 @@ body {
 }
 
 .timezone h2 {
-	margin: 10px 5px;
+	margin:0;
+	padding: 10px 25px;
+	background:#FFF0F0;
+}
+
+.list {
+	margin:0;
+	padding:0;
+}
+.list li {
+	list-style:none;
+	border-bottom:1px solid #CCC;
+	padding:8px 15px;
+}
+
+.newtask {
+	padding:8px 15px;
+}
+.newtask [type=submit] {
+	background-image:linear-gradient(to bottom, #8D8, #66D066);
+	border-radius:3px;
+	border:1px solid #33BB33;
+	padding:2px 7px;
 }
