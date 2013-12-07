@@ -41,33 +41,56 @@ function addTask(task, cb) {
                 return;
             }
             task.position = rows[0].max + 1;
-            insertTask(task, cb);
+            insertObject(task, 'task', cb);
         });
     } else {
-        insertTask(task, cb);
+        insertObject(task, 'task', cb);
     }
+}
 
-    function insertTask(task, cb) {
-        connection.query('INSERT INTO task SET ?', task, function(err, result) {
-            connection.end();
-            if (err) {
-                console.log(err);
-                cb(null);
-                return;
-            }
-            cb(result.insertId);
-        });
+function updateTask(task, cb) {
+    if (!task.id) {
+        addTask(task, cb);
+        return;
     }
+    updateObject(task, 'task', cb);
+
 }
 
 function removeTask(id, cb) {
     var connection = getConnection();
-    connection.query('DELETE FROM task WHERE id = ?', id, function(err, result) {
+    connection.query('DELETE FROM ?? WHERE id = ?', ['task', id], function(err, result) {
         connection.end();
         if (err) {
             console.log(err);
         }
         cb(null);
+    });
+}
+
+function insertObject(obj, table, cb) {
+    var connection = getConnection();
+    connection.query('INSERT INTO ?? SET ?', [table, obj], function(err, result) {
+        connection.end();
+        if (err) {
+            console.log(err);
+            cb(null);
+            return;
+        }
+        cb(result.insertId);
+    });
+}
+
+function updateObject(obj, table, cb) {
+    var connection = getConnection();
+    connection.query('UPDATE ?? SET ? WHERE id = ?', [table, obj, obj.id], function(err, result) {
+        connection.end();
+        if (err) {
+            console.log(err);
+            cb(null);
+            return;
+        }
+        cb(object.id);
     });
 }
 
