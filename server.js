@@ -2,21 +2,20 @@ var http = require('http');
 var ejs = require('ejs');
 var express = require('express');
 var fs = require('fs');
+var storage = require('./storage.js');
 
 var app = express();
 app.use(express.bodyParser());
 
-var lastid = 0;
-var list = new Array();
-
 app.get('/', function(req, res) {
+    var list = storage.getAllTasks();
     res.setHeader('Content-Type', 'text/html');
     res.render('index.ejs', {todos: list});
 });
 
 app.post('/insert', function(req, res) {
-    var todo = {id:++lastid, title:req.body.task};
-    list.push(todo);
+    var todo = {id:null, title:req.body.task};
+    storage.addTask(todo);
     res.setHeader('Location', '/');
     res.send(302, '');
 });
@@ -26,12 +25,7 @@ app.post('/delete', function(req, res) {
     if (id == undefined) {
         id = req.query.id;
     }
-    for (var i in list) {
-        if (list[i].id == id) {
-            list.splice(i, 1);
-            break;
-        }
-    }
+    storage.removeTask(id);
     if (req.xhr) {
         res.setHeader('Content-Type', 'text/plain');
         res.send(200, '');
