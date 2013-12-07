@@ -1,0 +1,23 @@
+<% for (var time in todos) { %>
+    <section class="timezone" data-timezone="<%= time %>" ondragover="dragOver(event);" ondrop="drop(event)">
+        <h2><%= time %></h2>
+        <% if (todos[time].length) { %>
+            <ul>
+                <% for (var i in todos[time]) { %>
+                    <% var todo=todos[time][i] %>
+                    <li id="todo<%= todo.id %>" draggable="true" ondragstart="startDrag(<%= todo.id %>, event)">
+                        <%= todo.title %>
+                        <a href="#" onclick="deleteElement(<%= todo.id %>); return false;">X</a>
+                    </li>
+                <% } %>
+            </ul>
+        <% } else { %>
+        <p>You have no todos yet.</p>
+        <% } %>
+        <form action="/insert" method="post">
+            <input type="hidden" name="timezone" value="<%= time %>"/>
+            <input type="text" name="task"/>
+            <input type="submit" value="new task"/>
+        </form>
+    </section>
+<% } %>

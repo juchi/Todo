@@ -19,13 +19,19 @@ function getAllTasks(cb) {
             return;
         }
         var tasks = new Array();
+        tasks['today'] = new Array();
+        tasks['week'] = new Array();
         for (var i in rows) {
             var task = {};
             for (var j in fields) {
                 var field = fields[j]['name'];
                 task[field] = rows[i][field];
             }
-            tasks.push(task);
+            var timezone = task.timezone;
+            if (tasks[timezone] == undefined) {
+                tasks[timezone] = new Array();
+            }
+            tasks[timezone].push(task);
         }
         cb(tasks);
     });
@@ -48,7 +54,14 @@ function addTask(task, cb) {
     }
 }
 
-function updateTask(task, cb) {
+function updateTask(task, data, cb) {
+    if (typeof task == 'object') {
+        cb = data;
+    } else {
+        var id = task;
+        task = data;
+        task.id = id;
+    }
     if (!task.id) {
         addTask(task, cb);
         return;
@@ -90,10 +103,11 @@ function updateObject(obj, table, cb) {
             cb(null);
             return;
         }
-        cb(object.id);
+        cb(obj.id);
     });
 }
 
 exports.getAllTasks = getAllTasks;
 exports.addTask = addTask;
+exports.updateTask = updateTask;
 exports.removeTask = removeTask;

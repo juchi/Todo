@@ -6,29 +6,10 @@
 </head>
 
 <body>
-    <h1>The To-Do list</h1>
-
-    <section>
-        <h2>Today</h2>
-        <div class="list">
-            <% if (todos.length) { %>
-            <ul>
-                <% for (var i in todos) { %>
-                    <li id="todo<%= todos[i].id %>">
-                        <%= todos[i].title %>
-                        <a href="#" onclick="deleteElement(<%= todos[i].id %>); return false;">X</a>
-                    </li>
-                <% } %>
-            </ul>
-            <% } else { %>
-                <p>You have no todo yet.</p>
-            <% } %>
-        </div>
-        <form action="/insert" method="post">
-            <input type="text" name="task"/>
-            <input type="submit" value="new task"/>
-        </form>
-    </section>
+    <header>
+        <h1>The To-Do list</h1>
+    </header>
+    <% include timezone %>
 
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script type="text/javascript" src="/assets/scripts.js"></script>

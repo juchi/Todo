@@ -14,11 +14,29 @@ app.get('/', function(req, res) {
 });
 
 app.post('/insert', function(req, res) {
-    var todo = {id:null, title:req.body.task};
+    var todo = {id:null, title:req.body.task, timezone:req.body.timezone};
     storage.addTask(todo, function() {
         res.setHeader('Location', '/');
         res.send(302, '');
     });
+});
+
+app.post('/update', function(req, res) {
+    var id = req.body.id;
+    var data = JSON.parse(req.body.data);
+    if (id == undefined) {
+        id = req.query.id;
+    }
+    storage.updateTask(id, data, function(){
+        if (req.xhr) {
+            res.setHeader('Content-Type', 'text/plain');
+            res.send(200, '');
+        } else {
+            res.setHeader('Location', '/');
+            res.send(302, '');
+        }
+    });
+    
 });
 
 app.post('/delete', function(req, res) {
