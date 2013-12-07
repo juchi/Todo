@@ -11,7 +11,7 @@ function getConnection() {
 
 function getAllTasks(cb) {
     var connection = getConnection();
-    connection.query('SELECT * FROM task', function(err, rows, fields) {
+    connection.query('SELECT * FROM task ORDER BY position', function(err, rows, fields) {
         connection.end();
         if (err) {
             console.log(err);
@@ -33,14 +33,31 @@ function getAllTasks(cb) {
 
 function addTask(task, cb) {
     var connection = getConnection();
-    connection.query('INSERT INTO task SET ?', {title:task.title}, function(err, result) {
-        connection.end();
-        if (err) {
-            console.log(err);
-            cb(null);
-        }
-        cb(result.insertId);
-    });
+    if (!task.position) {
+        connection.query('SELECT MAX(position) as max FROM task', function(err, rows){
+            if (err) {
+                console.log(err);
+                cb(null);
+                return;
+            }
+            task.position = rows[0].max + 1;
+            insertTask(task, cb);
+        });
+    } else {
+        insertTask(task, cb);
+    }
+
+    function insertTask(task, cb) {
+        connection.query('INSERT INTO task SET ?', task, function(err, result) {
+            connection.end();
+            if (err) {
+                console.log(err);
+                cb(null);
+                return;
+            }
+            cb(result.insertId);
+        });
+    }
 }
 
 function removeTask(id, cb) {
