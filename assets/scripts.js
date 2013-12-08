@@ -2,6 +2,12 @@ jQuery(function($){
     $('.timezone .list').sortable({
         connectWith:".timezone .list",
         stop: function(event, ui) {
+            var sectionTimezone = ui.item.closest('section').data('timezone');
+            var taskUpdated = null;
+            if (ui.item.data('timezone') != sectionTimezone) {
+                ui.item.data('timezone', sectionTimezone);
+                taskUpdated = ui.item.data('id');
+            }
             var elements = ui.item.siblings().andSelf();
             var data = [];
             elements.each(function() {
@@ -9,10 +15,10 @@ jQuery(function($){
                 data.push({
                     id:$this.data('id'),
                     position:$this.index(),
-                    timezone:$this.closest('section').data('timezone')
+                    timezone:sectionTimezone
                 });
             });
-            updateElements(data);
+            updateElements(data, taskUpdated);
         }
     });
 });
@@ -28,10 +34,13 @@ function deleteElement(index) {
     });
 }
 
-function updateElements(elements) {
+function updateElements(elements, taskUpdated) {
     jQuery.ajax('/update', {
         type: 'POST',
-        data: {'data':JSON.stringify(elements)}
+        data: {
+            'data':JSON.stringify(elements),
+            'task_updated':taskUpdated
+    }
     }).fail(function() {
         displayErrorMessage('Unable to update the items.');
     });

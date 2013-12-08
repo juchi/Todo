@@ -23,7 +23,20 @@ app.post('/insert', function(req, res) {
 
 app.post('/update', function(req, res) {
     var data = JSON.parse(req.body.data);
-    storage.updateTask(data, function(){
+    var callbacks = 1, done=0, id;
+    storage.updateTask(data, end);
+    if (id = req.body.task_updated) {
+        callbacks++;
+        storage.updateTask({id:id,created_at:new Date()}, end);
+    }
+
+    function end() {
+        if (callbacks == ++done) {
+            sendResponse();
+        }
+    }
+
+    function sendResponse() {
         if (req.xhr) {
             res.setHeader('Content-Type', 'text/plain');
             res.send(200, '');
@@ -31,7 +44,7 @@ app.post('/update', function(req, res) {
             res.setHeader('Location', '/');
             res.send(302, '');
         }
-    });
+    };
     
 });
 

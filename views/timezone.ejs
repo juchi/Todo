@@ -2,10 +2,10 @@
     <section class="timezone" data-timezone="<%= time %>">
         <h2><%= time %></h2>
         <% if (todos[time].length) { %>
-            <ul class="list" id="ul<%= time %>">
+            <ul class="list">
                 <% for (var i in todos[time]) { %>
                     <% var todo=todos[time][i] %>
-                    <li id="todo<%= todo.id %>" data-id="<%= todo.id %>">
+                    <li id="todo<%= todo.id %>" data-id="<%= todo.id %>" data-timezone="<%= todo.timezone %>">
                         <%= todo.title %>
                         <a href="#" onclick="deleteElement(<%= todo.id %>); return false;">X</a>
                     </li>

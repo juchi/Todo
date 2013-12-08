@@ -84,6 +84,7 @@ function removeTask(id, cb) {
 
 function insertObject(obj, table, cb) {
     var connection = getConnection();
+    obj.created_at = new Date();
     connection.query('INSERT INTO ?? SET ?', [table, obj], function(err, result) {
         connection.end();
         if (err) {
