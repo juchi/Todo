@@ -22,12 +22,8 @@ app.post('/insert', function(req, res) {
 });
 
 app.post('/update', function(req, res) {
-    var id = req.body.id;
     var data = JSON.parse(req.body.data);
-    if (id == undefined) {
-        id = req.query.id;
-    }
-    storage.updateTask(id, data, function(){
+    storage.updateTask(data, function(){
         if (req.xhr) {
             res.setHeader('Content-Type', 'text/plain');
             res.send(200, '');

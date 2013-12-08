@@ -54,20 +54,21 @@ function addTask(task, cb) {
     }
 }
 
-function updateTask(task, data, cb) {
-    if (typeof task == 'object') {
-        cb = data;
-    } else {
-        var id = task;
-        task = data;
-        task.id = id;
+function updateTask(data, cb) {
+    if (!Array.isArray(data)) {
+        data = [data];
     }
-    if (!task.id) {
-        addTask(task, cb);
-        return;
-    }
-    updateObject(task, 'task', cb);
+    var size = data.length;
+    var done = 0;
+    data.forEach(function(task) {
+        updateObject(task, 'task', checkDone);
+    });
 
+    function checkDone(idUpdated) {
+        if (++done == size) {
+            cb();
+        }
+    }
 }
 
 function removeTask(id, cb) {

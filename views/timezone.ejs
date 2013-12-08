@@ -1,11 +1,11 @@
 <% for (var time in todos) { %>
-    <section class="timezone" data-timezone="<%= time %>" ondragover="dragOver(event);" ondrop="drop(event)">
+    <section class="timezone" data-timezone="<%= time %>">
         <h2><%= time %></h2>
         <% if (todos[time].length) { %>
-            <ul class="list">
+            <ul class="list" id="ul<%= time %>">
                 <% for (var i in todos[time]) { %>
                     <% var todo=todos[time][i] %>
-                    <li id="todo<%= todo.id %>" draggable="true" ondragstart="startDrag(<%= todo.id %>, event)">
+                    <li id="todo<%= todo.id %>" data-id="<%= todo.id %>">
                         <%= todo.title %>
                         <a href="#" onclick="deleteElement(<%= todo.id %>); return false;">X</a>
                     </li>
