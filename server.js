@@ -1,13 +1,13 @@
 var ejs = require('ejs');
 var express = require('express');
 var fs = require('fs');
-var storage = require('./storage');
+var task = require('./task');
 
 var app = express();
 app.use(express.bodyParser());
 
 app.get('/', function(req, res) {
-    storage.getAllTasks(function(tasks){
+    task.getAllTasks(function(tasks){
         res.setHeader('Content-Type', 'text/html');
         res.render('index.ejs', {todos: tasks});
     });
@@ -15,7 +15,7 @@ app.get('/', function(req, res) {
 
 app.post('/insert', function(req, res) {
     var todo = {id:null, title:req.body.task, timezone:req.body.timezone};
-    storage.addTask(todo, function() {
+    task.addTask(todo, function() {
         res.setHeader('Location', '/');
         res.send(302, '');
     });
@@ -24,10 +24,10 @@ app.post('/insert', function(req, res) {
 app.post('/update', function(req, res) {
     var data = JSON.parse(req.body.data);
     var callbacks = 1, done=0, id;
-    storage.updateTask(data, end);
+    task.updateTask(data, end);
     if (id = req.body.task_updated) {
         callbacks++;
-        storage.updateTask({id:id,created_at:new Date()}, end);
+        task.updateTask({id:id,created_at:new Date()}, end);
     }
 
     function end() {
@@ -53,7 +53,7 @@ app.post('/delete', function(req, res) {
     if (id == undefined) {
         id = req.query.id;
     }
-    storage.removeTask(id, function(){
+    task.removeTask(id, function(){
         if (req.xhr) {
             res.setHeader('Content-Type', 'text/plain');
             res.send(200, '');
