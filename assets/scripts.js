@@ -21,7 +21,34 @@ jQuery(function($){
             updateElements(data, taskUpdated);
         }
     });
+
+    $('.timezone li').on('dblclick', function() {
+        editTitle($(this));
+    });
 });
+
+function editTitle(li) {
+    li.find('.view').hide();
+    var input = $('<input type="text" class="edit-task"/>');
+    input.val(li.find('.title').text());
+    li.append(input);
+
+    input.focus();
+    input.on('blur', function() {updateTitle($(this));});
+    input.on('keypress', function(e) {
+        if (e.keyCode == 13) {
+            updateTitle($(this));
+        }
+    });
+}
+function updateTitle(input) {
+    var li = input.parent();
+    var newTitle = input.val();
+    updateElements({id:li.data('id'), title:newTitle});
+    input.hide();
+    li.find('.title').text(newTitle);
+    li.find('.view').show();
+}
 
 function deleteElement(index) {
     jQuery.ajax('/delete', {
@@ -48,23 +75,4 @@ function updateElements(elements, taskUpdated) {
 
 function displayErrorMessage(message) {
     alert(message);
-}
-
-function startDrag(taskId, event) {
-    event.dataTransfer.setData('task', taskId);
-}
-
-function drop(event) {
-    if (event.target.className != 'timezone') {
-        return;
-    }
-    var timezone = event.target.dataset.timezone;
-    var id = event.dataTransfer.getData('task');
-    var todo = document.getElementById('todo'+id);
-    jQuery(event.target).children('ul').append(todo);
-    updateElement(id, {timezone:timezone});
-}
-
-function dragOver(event) {
-    event.preventDefault();
 }
