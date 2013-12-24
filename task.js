@@ -1,17 +1,22 @@
 var storage = require('./storage');
 
-function getAllTasks(cb) {
+function getAllTasks(user, cb) {
+    var tasks = new Array();
+        tasks['today'] = new Array();
+        tasks['week'] = new Array();
+
+    if (user.id == null) {
+        cb(tasks);
+        return;
+    }
     var connection = storage.getConnection();
-    connection.query('SELECT * FROM task ORDER BY position', function(err, rows, fields) {
+    connection.query('SELECT * FROM task WHERE user_id = ? ORDER BY position', user.id, function(err, rows, fields) {
         connection.end();
         if (err) {
             console.log(err);
             cb(new Array());
             return;
         }
-        var tasks = new Array();
-        tasks['today'] = new Array();
-        tasks['week'] = new Array();
         for (var i in rows) {
             var task = {};
             for (var j in fields) {
@@ -28,10 +33,15 @@ function getAllTasks(cb) {
     });
 }
 
-function addTask(task, cb) {
+function addTask(task, user, cb) {
+    if (user.id == null) {
+        cb(null);
+        return;
+    }
+    task.user_id = user.id;
     var connection = storage.getConnection();
     if (!task.position) {
-        connection.query('SELECT MAX(position) as max FROM task', function(err, rows){
+        connection.query('SELECT MAX(position) as max FROM task WHERE user_id = ?', user.id, function(err, rows){
             if (err) {
                 console.log(err);
                 cb(null);
@@ -45,7 +55,7 @@ function addTask(task, cb) {
     }
 }
 
-function updateTask(data, cb) {
+function updateTask(data, user, cb) {
     if (!Array.isArray(data)) {
         data = [data];
     }
@@ -62,9 +72,9 @@ function updateTask(data, cb) {
     }
 }
 
-function removeTask(id, cb) {
+function removeTask(id, user, cb) {
     var connection = storage.getConnection();
-    connection.query('DELETE FROM ?? WHERE id = ?', ['task', id], function(err, result) {
+    connection.query('DELETE FROM ?? WHERE id = ? AND user_id = ?', ['task', id, user.id], function(err, result) {
         connection.end();
         if (err) {
             console.log(err);
