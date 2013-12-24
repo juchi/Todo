@@ -3,6 +3,7 @@ var express = require('express');
 var fs = require('fs');
 var task = require('./task');
 var session = require('./models/session').session;
+var User = require('./models/user').User;
 
 var app = express();
 app.use(express.cookieParser());
@@ -102,7 +103,27 @@ app.get('/register', function(req, res) {
     session.init(req, handler);
 
     function handler() {
-        res.redirect('/');
+        res.render('register.ejs');
+    }
+});
+
+app.post('/register', function(req, res) {
+    session.init(req, handler);
+
+    function handler() {
+        var user = new User();
+        user.name = req.body.login;
+        user.password = req.body.password;
+        user.save(redirect);
+
+        function redirect(newid) {
+            if (newid) {
+                req.session.user_id = newid;
+                res.redirect('/');
+            } else {
+                res.render('register.ejs');
+            }
+        }
     }
 });
 
