@@ -9,6 +9,19 @@ function getConnection() {
     });
 }
 
+function getObject(id, table, cb) {
+    var connection = getConnection();
+    connection.query('SELECT * FROM ?? WHERE id = ?', [table, id], function(err, rows) {
+        connection.end();
+        if (err) {
+            console.log(err);
+            cb();
+            return;
+        }
+        cb(rows);
+    });
+}
+
 function insertObject(obj, table, cb) {
     var connection = getConnection();
     obj.created_at = new Date();
@@ -37,5 +50,6 @@ function updateObject(obj, table, cb) {
 }
 
 exports.getConnection = getConnection;
-exports.insertObject = insertObject;
-exports.updateObject = updateObject;
+exports.getObject     = getObject;
+exports.insertObject  = insertObject;
+exports.updateObject  = updateObject;
