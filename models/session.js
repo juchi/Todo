@@ -1,5 +1,5 @@
 var User = require('./user').User;
-var storage = require('../storage');
+var storage = require('./storage');
 
 var Session = function() {
     this.httpSession = null;

@@ -1,7 +1,7 @@
 var ejs = require('ejs');
 var express = require('express');
 var fs = require('fs');
-var task = require('./task');
+var task = require('./models/task');
 var session = require('./models/session').session;
 var User = require('./models/user').User;
 

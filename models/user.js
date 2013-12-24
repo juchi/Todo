@@ -1,4 +1,4 @@
-var storage = require('../storage');
+var storage = require('./storage');
 
 var User = function() {
     this.id = null;
