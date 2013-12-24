@@ -16,8 +16,11 @@
             <% } %>
         </div>
     </header>
-    <% include timezone %>
-
+    <% if (user.logged_in) { %>
+        <% include timezone %>
+    <% } else {%>
+        <p>It's currently not possible to set a todo list without a registered account.</p>
+    <% } %>
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
     <script type="text/javascript" src="/assets/scripts.js"></script>
