@@ -11,7 +11,6 @@ app.use(express.bodyParser());
 
 app.get('/', function(req, res) {
     session.init(req, handler);
-    console.log(req.query);
     function handler() {
         var user = session.getUser();
         task.getAllTasks(user, function(tasks) {
@@ -108,11 +107,37 @@ app.get('/register', function(req, res) {
 });
 
 app.get('/login', function(req, res) {
-    req.session.user_id = 1;
     session.init(req, handler);
 
     function handler() {
-        res.redirect('/');
+        if (session.getUser().id) {
+            res.redirect('/');
+        } else {
+            res.render('login.ejs', {error:false});
+        }
+    }
+});
+
+app.post('/login', function(req, res) {
+    session.init(req, handler);
+
+    function handler() {
+        if (!session.getUser().id) {
+            var login    = req.body.login;
+            var password = req.body.password;
+            session.login(login, password, redirect);
+        } else {
+            res.redirect('/');
+        }
+
+        function redirect(success) {
+            if (success) {
+                res.redirect('/');
+            } else {
+                res.render('login.ejs', {error:true});
+            }
+        }
+
     }
 });
 

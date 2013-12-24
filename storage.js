@@ -9,6 +9,35 @@ function getConnection() {
     });
 }
 
+function select(fields, table, where, cb) {
+    var connection = getConnection();
+    if (fields == null) {
+        fields = '*';
+    } else {
+        fields = connection.escape(fields);
+    }
+    if (typeof where == 'object') {
+        var _where = '';
+        var i = 0;
+        for (var key in where) {
+            if (i++ > 0) {
+                _where += ' AND '
+            }
+            _where += key + ' = ' + connection.escape(where[key]);
+        }
+        where = _where;
+    }
+    connection.query('SELECT '+fields+' FROM ?? WHERE '+ where, table, function (err, rows) {
+        connection.end();
+        if (err) {
+            console.log(err);
+            cb(null);
+            return;
+        }
+        cb(rows);
+    });
+}
+
 function getObject(id, table, cb) {
     var connection = getConnection();
     connection.query('SELECT * FROM ?? WHERE id = ?', [table, id], function(err, rows) {
@@ -50,6 +79,7 @@ function updateObject(obj, table, cb) {
 }
 
 exports.getConnection = getConnection;
+exports.select        = select;
 exports.getObject     = getObject;
 exports.insertObject  = insertObject;
 exports.updateObject  = updateObject;

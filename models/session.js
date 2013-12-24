@@ -19,6 +19,7 @@ Session.prototype.init = function(req, cb) {
     function registerUser(data) {
         if (Array.isArray(data) && data.length > 0) {
             that.user = data[0];
+            that.user.logged_in = true;
         }
         cb();
     }
@@ -28,6 +29,17 @@ Session.prototype.getUser = function() {
     return this.user;
 };
 
+Session.prototype.login = function(login, password, cb) {
+    var that = this;
+    storage.select(null, 'user', {'name':login, 'password':password}, function(result) {
+        var success = false;
+        if (result && result.length) {
+            success = true;
+            that.httpSession.user_id = result[0].id;
+        }
+        cb(success);
+    });
+}
 Session.prototype.logout = function() {
     this.user = new User();
     this.httpSession.user_id = null;

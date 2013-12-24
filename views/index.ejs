@@ -8,6 +8,13 @@
 <body>
     <header>
         <h1>The To-Do list<% if (user.name) {%> of <%= user.name %><% } %></h1>
+        <div class="user-box">
+            <% if (user.logged_in) { %>
+                <a href="/logout">Logout</a>
+            <% } else { %>
+                <a href="/login">Login</a>
+            <% } %>
+        </div>
     </header>
     <% include timezone %>
 
