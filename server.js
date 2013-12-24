@@ -36,10 +36,12 @@ app.post('/insert', function(req, res) {
 
 app.post('/update', function(req, res) {
     session.init(req, handler);
+    var callbacks, done = 0;
     function handler() {
         var user = session.getUser();
         var data = JSON.parse(req.body.data);
-        var callbacks = 1, done=0, id;
+        callbacks = 1
+        var id;
         task.updateTask(data, user, end);
         if (id = req.body.task_updated) {
             callbacks++;
