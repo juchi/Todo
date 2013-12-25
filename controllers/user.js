@@ -1,14 +1,17 @@
-var User = require('../models/user').User;
-var session = require('../models/session').session;
+var User = require('../models/user');
+var Session = require('../models/session');
+var session = new Session();
 
 function init(app) {
-    app.get('/register', function(req, res) {
+    app.get('/register', register);
+
+    function register(req, res) {
         session.init(req, handler);
 
         function handler() {
             res.render('register.ejs');
         }
-    });
+    }
 
     app.post('/register', function(req, res) {
         session.init(req, handler);

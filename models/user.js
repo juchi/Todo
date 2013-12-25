@@ -21,4 +21,4 @@ User.prototype.save = function(cb) {
     }
 }
 
-exports.User = User;
+module.exports = User;

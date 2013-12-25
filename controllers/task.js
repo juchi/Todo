@@ -1,5 +1,6 @@
 var task = require('../models/task');
-var session = require('../models/session').session;
+var Session = require('../models/session');
+var session = new Session();
 
 function init(app) {
     app.get('/', function(req, res) {

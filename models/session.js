@@ -1,4 +1,4 @@
-var User = require('./user').User;
+var User = require('./user');
 var storage = require('./storage');
 
 var Session = function() {
@@ -46,4 +46,4 @@ Session.prototype.logout = function() {
     return this;
 };
 
-exports.session = new Session();
+module.exports = Session;
