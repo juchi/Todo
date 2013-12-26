@@ -2,81 +2,67 @@ var User = require('../models/user');
 var Session = require('../models/session');
 var session = new Session();
 
-function init(app) {
-    app.get('/register', register);
+function getRoutes() {
+    var routes = [
+        {verb: 'get',  path: '/register', handler: register},
+        {verb: 'post', path: '/register', handler: registerPost},
+        {verb: 'get',  path: '/login', handler: login},
+        {verb: 'post', path: '/login', handler: loginPost},
+        {verb: 'get',  path: '/logout', handler: logout}
+    ];
 
-    function register(req, res) {
-        session.init(req, handler);
+    return routes;
+}
 
-        function handler() {
+function register(req, res) {
+    res.render('register.ejs');
+}
+
+function registerPost(req, res) {
+    var user = new User();
+    user.name = req.body.login;
+    user.password = req.body.password;
+    user.save(redirect);
+
+    function redirect(newid) {
+        if (newid) {
+            req.session.user_id = newid;
+            res.redirect('/');
+        } else {
             res.render('register.ejs');
         }
     }
-
-    app.post('/register', function(req, res) {
-        session.init(req, handler);
-
-        function handler() {
-            var user = new User();
-            user.name = req.body.login;
-            user.password = req.body.password;
-            user.save(redirect);
-
-            function redirect(newid) {
-                if (newid) {
-                    req.session.user_id = newid;
-                    res.redirect('/');
-                } else {
-                    res.render('register.ejs');
-                }
-            }
-        }
-    });
-
-    app.get('/login', function(req, res) {
-        session.init(req, handler);
-
-        function handler() {
-            if (session.getUser().id) {
-                res.redirect('/');
-            } else {
-                res.render('login.ejs', {error:false});
-            }
-        }
-    });
-
-    app.post('/login', function(req, res) {
-        session.init(req, handler);
-
-        function handler() {
-            if (!session.getUser().id) {
-                var login    = req.body.login;
-                var password = req.body.password;
-                session.login(login, password, redirect);
-            } else {
-                res.redirect('/');
-            }
-
-            function redirect(success) {
-                if (success) {
-                    res.redirect('/');
-                } else {
-                    res.render('login.ejs', {error:true});
-                }
-            }
-
-        }
-    });
-
-    app.get('/logout', function(req, res) {
-        session.init(req, handler);
-
-        function handler() {
-            session.logout();
-            res.redirect('/');
-        }
-    });
-
 }
 
-exports.init = init;
+function login(req, res, session) {
+    if (session.getUser().id) {
+        res.redirect('/');
+    } else {
+        res.render('login.ejs', {error:false});
+    }
+}
+
+function loginPost(req, res, session) {
+    if (!session.getUser().id) {
+        var login    = req.body.login;
+        var password = req.body.password;
+        session.login(login, password, redirect);
+    } else {
+        res.redirect('/');
+    }
+
+    function redirect(success) {
+        if (success) {
+            res.redirect('/');
+        } else {
+            res.render('login.ejs', {error:true});
+        }
+    }
+}
+
+function logout(req, res, session) {
+    session.logout();
+    res.redirect('/');
+}
+
+exports.getRoutes = getRoutes;

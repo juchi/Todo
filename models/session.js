@@ -5,7 +5,7 @@ var Session = function() {
     this.httpSession = null;
 };
 
-Session.prototype.init = function(req, cb) {
+Session.prototype.init = function(req, res, cb) {
     var that = this;
     this.httpSession = req.session;
     this.user = new User();
@@ -13,7 +13,7 @@ Session.prototype.init = function(req, cb) {
         this.user.id = this.httpSession.user_id;
         storage.getObject(this.user.id, 'user', registerUser);
     } else {
-        cb();
+        cb(req, res, this);
     }
 
     function registerUser(data) {
@@ -21,7 +21,7 @@ Session.prototype.init = function(req, cb) {
             that.user = data[0];
             that.user.logged_in = true;
         }
-        cb();
+        cb(req, res, that);
     }
 };
 
