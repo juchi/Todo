@@ -1,6 +1,4 @@
 var User = require('../models/user');
-var Session = require('../models/session');
-var session = new Session();
 
 function getRoutes() {
     var routes = [

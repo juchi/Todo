@@ -1,6 +1,4 @@
 var task = require('../models/task');
-var Session = require('../models/session');
-var session = new Session();
 
 function getRoutes() {
     var routes = [
