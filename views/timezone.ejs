@@ -1,10 +1,10 @@
-<% for (var time in todos) { %>
-    <section class="timezone" data-timezone="<%= time %>">
-        <h2><%= time %></h2>
-        <% if (todos[time].length) { %>
+<% for (var j in timezones) {  %>
+    <section class="timezone" data-timezone="<%= j %>">
+        <h2><%= timezones[j] %></h2>
+        <% if (todos[timezones[j]].length) { %>
             <ul class="list">
-                <% for (var i in todos[time]) { %>
-                    <% var todo=todos[time][i] %>
+                <% for (var i in todos[timezones[j]]) { %>
+                    <% var todo=todos[timezones[j]][i] %>
                     <li id="todo<%= todo.id %>" data-id="<%= todo.id %>" data-timezone="<%= todo.timezone %>">
                         <div class="view">
                             <span class="title"><%= todo.title %></span>
@@ -18,7 +18,7 @@
         <% } %>
         <div class="newtask">
             <form action="/insert" method="post">
-                <input type="hidden" name="timezone" value="<%= time %>"/>
+                <input type="hidden" name="timezone" value="<%= j %>"/>
                 <input type="text" name="task"/>
                 <input type="submit" value="new task"/>
             </form>

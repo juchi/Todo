@@ -31,7 +31,7 @@ Session.prototype.getUser = function() {
 
 Session.prototype.login = function(login, password, cb) {
     var that = this;
-    storage.select(null, 'user', {'name':login, 'password':password}, function(result) {
+    storage.getCollection(null, 'user', {'name':login, 'password':password}, function(result) {
         var success = false;
         if (result && result.length) {
             success = true;

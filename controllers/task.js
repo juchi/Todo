@@ -13,9 +13,9 @@ function getRoutes() {
 
 function index(req, res, session) {
     var user = session.getUser();
-    task.getAllTasks(user, function(tasks) {
+    task.getAllTasks(user, function(tasks, timezones) {
         res.setHeader('Content-Type', 'text/html');
-        res.render('index.ejs', {todos: tasks, user: user}, function(err, html) {
+        res.render('index.ejs', {todos: tasks, 'timezones': timezones, user: user}, function(err, html) {
             res.send(200, html);
         });
     });

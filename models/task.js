@@ -1,36 +1,46 @@
 var storage = require('./storage');
+var timezone = require('./timezone');
 
 function getAllTasks(user, cb) {
     var tasks = new Array();
-        tasks['today'] = new Array();
-        tasks['week'] = new Array();
+    var timezones = {};
 
-    if (user.id == null) {
-        cb(tasks);
-        return;
-    }
-    var connection = storage.getConnection();
-    connection.query('SELECT * FROM task WHERE user_id = ? ORDER BY position', user.id, function(err, rows, fields) {
-        connection.end();
-        if (err) {
-            console.log(err);
-            cb(new Array());
+    timezone.getAllTimezones(function(list) {
+        for (i in list) {
+            timezones[list[i].id] = list[i].name;
+            tasks[list[i].name] = new Array();
+        }
+        if (user.id == null) {
+            cb(tasks, timezones);
             return;
         }
-        for (var i in rows) {
-            var task = {};
-            for (var j in fields) {
-                var field = fields[j]['name'];
-                task[field] = rows[i][field];
-            }
-            var timezone = task.timezone;
-            if (tasks[timezone] == undefined) {
-                tasks[timezone] = new Array();
-            }
-            tasks[timezone].push(task);
-        }
-        cb(tasks);
+        next();
     });
+
+    function next() {
+        var connection = storage.getConnection();
+        connection.query('SELECT * FROM task WHERE user_id = ? ORDER BY position', user.id, function(err, rows, fields) {
+            connection.end();
+            if (err) {
+                console.log(err);
+                cb(new Array());
+                return;
+            }
+            for (var i in rows) {
+                var task = {};
+                for (var j in fields) {
+                    var field = fields[j]['name'];
+                    task[field] = rows[i][field];
+                }
+                var timezone = timezones[task.timezone];
+                if (tasks[timezone] == undefined) {
+                    tasks[timezone] = new Array();
+                }
+                tasks[timezone].push(task);
+            }
+            cb(tasks, timezones);
+        });
+    }
 }
 
 function addTask(task, user, cb) {

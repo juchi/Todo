@@ -9,14 +9,16 @@ function getConnection() {
     });
 }
 
-function select(fields, table, where, cb) {
+function getCollection(fields, table, where, cb) {
     var connection = getConnection();
     if (fields == null) {
         fields = '*';
     } else {
         fields = connection.escape(fields);
     }
-    if (typeof where == 'object') {
+    if (where == null) {
+        where = '';
+    } else if (typeof where == 'object') {
         var _where = '';
         var i = 0;
         for (var key in where) {
@@ -25,9 +27,9 @@ function select(fields, table, where, cb) {
             }
             _where += key + ' = ' + connection.escape(where[key]);
         }
-        where = _where;
+        where = ' WHERE ' + _where;
     }
-    connection.query('SELECT '+fields+' FROM ?? WHERE '+ where, table, function (err, rows) {
+    connection.query('SELECT '+fields+' FROM ??'+ where, table, function (err, rows) {
         connection.end();
         if (err) {
             console.log(err);
@@ -79,7 +81,7 @@ function updateObject(obj, table, cb) {
 }
 
 exports.getConnection = getConnection;
-exports.select        = select;
+exports.getCollection = getCollection;
 exports.getObject     = getObject;
 exports.insertObject  = insertObject;
 exports.updateObject  = updateObject;
