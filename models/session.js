@@ -31,11 +31,12 @@ Session.prototype.getUser = function() {
 
 Session.prototype.login = function(login, password, cb) {
     var that = this;
-    storage.getCollection(null, 'user', {'name':login, 'password':password}, function(result) {
+    this.user.name = login;
+    this.user.authenticate(password, function(result) {
         var success = false;
-        if (result && result.length) {
+        if (result) {
             success = true;
-            that.httpSession.user_id = result[0].id;
+            that.httpSession.user_id = result;
         }
         cb(success);
     });
