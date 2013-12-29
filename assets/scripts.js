@@ -1,5 +1,8 @@
 jQuery(function($){
-    $('.timezone .list').sortable({
+    $('.timezone .list')
+    .sortable({
+        items:"> li:not(.placeholder)",
+        revert: 300,
         connectWith:".timezone .list",
         stop: function(event, ui) {
             var sectionTimezone = ui.item.closest('section').data('timezone');

@@ -1,21 +1,18 @@
 <% for (var j in timezones) {  %>
     <section class="timezone" data-timezone="<%= j %>">
         <h2><%= timezones[j] %></h2>
-        <% if (todos[timezones[j]].length) { %>
-            <ul class="list">
-                <% for (var i in todos[timezones[j]]) { %>
-                    <% var todo=todos[timezones[j]][i] %>
-                    <li id="todo<%= todo.id %>" data-id="<%= todo.id %>" data-timezone="<%= todo.timezone %>">
-                        <div class="view">
-                            <span class="title"><%= todo.title %></span>
-                            <a href="#" onclick="deleteElement(<%= todo.id %>); return false;">X</a>
-                        </div>
-                    </li>
-                <% } %>
-            </ul>
-        <% } else { %>
-        <p>You have no todos yet.</p>
-        <% } %>
+        <ul class="list">
+            <% for (var i in todos[timezones[j]]) { %>
+                <% var todo=todos[timezones[j]][i] %>
+                <li id="todo<%= todo.id %>" data-id="<%= todo.id %>" data-timezone="<%= todo.timezone %>">
+                    <div class="view">
+                        <span class="title"><%= todo.title %></span>
+                        <a href="#" onclick="deleteElement(<%= todo.id %>); return false;">X</a>
+                    </div>
+                </li>
+            <% } %>
+            <li class="placeholder">You have no todos yet.</li>
+        </ul>
         <div class="newtask">
             <form action="/insert" method="post">
                 <input type="hidden" name="timezone" value="<%= j %>"/>
