@@ -10,9 +10,9 @@
         <h1>The To-Do list<% if (user.name) {%> of <%= user.name %><% } %></h1>
         <div class="user-box">
             <% if (user.logged_in) { %>
-                <a href="/logout">Logout</a>
+                <a href="/logout">Log out</a>
             <% } else { %>
-                <a href="/login">Login</a> or <a href="/register">Register</a>
+                <a href="/login">Log in</a> or <a href="/register">Register</a>
             <% } %>
         </div>
     </header>
