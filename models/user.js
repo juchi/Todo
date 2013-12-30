@@ -41,6 +41,7 @@ User.prototype.authenticate = function(password, cb) {
             var user = rows[0];
             if (user.password == that.hashPassword(password, user.salt)) {
                 cb(user.id);
+                return;
             }
         }
         cb(false);
