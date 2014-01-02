@@ -11,7 +11,7 @@ jQuery(function($){
                 ui.item.data('timezone', sectionTimezone);
                 taskUpdated = ui.item.data('id');
             }
-            var elements = ui.item.siblings().andSelf();
+            var elements = ui.item.siblings().addBack();
             var data = [];
             elements.each(function() {
                 $this = $(this);
@@ -25,8 +25,8 @@ jQuery(function($){
         }
     });
 
-    $('.timezone li').on('dblclick', function() {
-        editTitle($(this));
+    $('.timezone .view').on('dblclick', function() {
+        editTitle($(this).parent());
     });
 });
 
@@ -45,10 +45,10 @@ function editTitle(li) {
     });
 }
 function updateTitle(input) {
-    var li = input.parent();
+    var li = input.closest('li');
     var newTitle = input.val();
     updateElements({id:li.data('id'), title:newTitle});
-    input.hide();
+    input.remove();
     li.find('.title').text(newTitle);
     li.find('.view').show();
 }
