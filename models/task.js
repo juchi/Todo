@@ -44,7 +44,7 @@ function getAllTasks(user, cb) {
 }
 
 function addTask(task, user, cb) {
-    if (user.id == null) {
+    if (user.id == null || !task.title || task.title.length == 0) {
         cb(null);
         return;
     }
@@ -69,14 +69,23 @@ function updateTask(data, user, cb) {
     if (!Array.isArray(data)) {
         data = [data];
     }
-    var size = data.length;
+    var size = data.length || 0;
     var done = 0;
     data.forEach(function(task) {
+        // do not update tasks with an empty label
+        if (!data.title || data.title.length == 0) {
+            size--;
+            checkDone(null);
+            return;
+        }
         storage.updateObject(task, 'task', checkDone);
     });
 
     function checkDone(idUpdated) {
-        if (++done == size) {
+        if (idUpdated) {
+            done++;
+        }
+        if (done == size) {
             cb();
         }
     }

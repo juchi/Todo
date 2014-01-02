@@ -32,7 +32,7 @@ jQuery(function($){
 
 function editTitle(li) {
     li.find('.view').hide();
-    var input = $('<input type="text" class="edit-task"/>');
+    var input = $('<input type="text" class="edit-task" required/>');
     input.val(li.find('.title').text());
     li.append(input);
 
@@ -46,10 +46,13 @@ function editTitle(li) {
 }
 function updateTitle(input) {
     var li = input.closest('li');
-    var newTitle = input.val();
-    updateElements({id:li.data('id'), title:newTitle});
+
+    if (input.val()) {
+        var newTitle = input.val();
+        updateElements({id:li.data('id'), title:newTitle});
+        li.find('.title').text(newTitle);
+    }
     input.remove();
-    li.find('.title').text(newTitle);
     li.find('.view').show();
 }
 

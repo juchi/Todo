@@ -16,7 +16,7 @@
         <div class="newtask">
             <form action="/insert" method="post">
                 <input type="hidden" name="timezone" value="<%= j %>"/>
-                <input type="text" name="task"/>
+                <input type="text" name="task" required/>
                 <input type="submit" value="new task"/>
             </form>
         </div>
