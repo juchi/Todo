@@ -4,10 +4,10 @@
         <ul class="list">
             <% for (var i in todos[timezones[j]]) { %>
                 <% var todo=todos[timezones[j]][i] %>
-                <li id="todo<%= todo.id %>" data-id="<%= todo.id %>" data-timezone="<%= todo.timezone %>">
+                <li id="todo<%= todo.id %>" class="task" data-id="<%= todo.id %>" data-timezone="<%= todo.timezone %>">
                     <div class="view">
                         <span class="title"><%= todo.title %></span>
-                        <a href="#" onclick="deleteElement(<%= todo.id %>); return false;">X</a>
+                        <a href="#" onclick="deleteElement(<%= todo.id %>); return false;" class="action remove">&#10007;</a>
                     </div>
                 </li>
             <% } %>
