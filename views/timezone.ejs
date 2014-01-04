@@ -4,7 +4,12 @@
         <ul class="list">
             <% for (var i in todos[timezones[j]]) { %>
                 <% var todo=todos[timezones[j]][i] %>
-                <li id="todo<%= todo.id %>" class="task" data-id="<%= todo.id %>" data-timezone="<%= todo.timezone %>">
+                <li id="todo<%= todo.id %>" class="task"
+                    data-id="<%= todo.id %>"
+                    data-timezone="<%= todo.timezone %>"
+                    <% if (todo.deadline) { %>
+                    data-deadline="<%= todo.deadline.toISOString().substr(0, 10) %>"
+                    <% } %>>
                     <div class="view">
                         <span class="title"><%= todo.title %></span>
                         <a href="#" class="action edit"></a>

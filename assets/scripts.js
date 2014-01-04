@@ -63,6 +63,17 @@ jQuery(function($){
 
         return false;
     });
+
+    // check outdated tasks
+    $('.task').each(function() {
+        var $this = $(this);
+        if ($this.data('deadline')) {
+            var timestamp = Date.parse($this.data('deadline'));
+            if (timestamp < Date.now()) {
+                $this.addClass('outdated');
+            }
+        }
+    });
 });
 
 function editTitle(li) {

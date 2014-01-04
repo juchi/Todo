@@ -62,17 +62,16 @@ header .user-box {
 	border-bottom:1px solid #CCC;
 	padding:8px 15px;
 }
-.task .view {
+.task, .task .view {
     position:relative;
 }
 .task .action {
     color:#333;
     font-size: 1.4em;
     line-height:1em;
-    text-decoration: none;
     position:absolute;
-    right:10px;
     top:0;
+    text-decoration: none;
     opacity:0;
     transition:all 0.2s ease 0s;
 }
@@ -91,9 +90,24 @@ header .user-box {
 .task .remove:after {
     content:"\2717";
 }
+.task .timeout {
+    content:"\23F0";
+}
 .task .options {
     background:#FFFCF5;
     padding: 5px 0 5px 10px;
+}
+.task.outdated {
+    background:#F99;
+    padding-left:30px;
+}
+.task.outdated:before {
+    content:"\23F0";
+    position:absolute;
+    left:3px;
+    top:50%;
+    margin-top:-10px;
+    cursor:default;
 }
 .newtask {
 	padding:8px 15px;
