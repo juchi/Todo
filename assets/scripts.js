@@ -11,7 +11,7 @@ jQuery(function($){
                 ui.item.data('timezone', sectionTimezone);
                 taskUpdated = ui.item.data('id');
             }
-            var elements = ui.item.siblings().addBack();
+            var elements = ui.item.siblings('.task').addBack();
             var data = [];
             elements.each(function() {
                 $this = $(this);
