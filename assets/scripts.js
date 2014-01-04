@@ -28,6 +28,11 @@ jQuery(function($){
     $('.timezone .view').on('dblclick', function() {
         editTitle($(this).parent());
     });
+    $('.task .remove').on('click', function() {
+        var id = $(this).closest('.task').data('id');
+        deleteElement(id);
+        return false;
+    });
 });
 
 function editTitle(li) {
