@@ -73,7 +73,7 @@ function updateTask(data, user, cb) {
     var done = 0;
     data.forEach(function(task) {
         // do not update tasks with an empty label
-        if (!data.title || data.title.length == 0) {
+        if (data.title !== undefined && data.title.length == 0) {
             size--;
             checkDone(null);
             return;

@@ -79,9 +79,21 @@ header .user-box {
 .task:hover .action {
     opacity:1;
 }
+.task .edit {
+    right:40px;
+}
+.task .edit:after {
+    content:"\2699";
+}
+.task .remove {
+    right:10px;
+}
 .task .remove:after {
     content:"\2717";
-    right:10px;
+}
+.task .options {
+    background:#FFFCF5;
+    padding: 5px 0 5px 10px;
 }
 .newtask {
 	padding:8px 15px;

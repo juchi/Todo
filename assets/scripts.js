@@ -33,6 +33,36 @@ jQuery(function($){
         deleteElement(id);
         return false;
     });
+    $('.task .edit').on('click', function() {
+        var html = $('#task-options').html();
+        var task = $(this).closest('.task').append(html);
+        var getDate = function() {
+            return $('#deadline').val();
+        };
+
+        (function() {
+            var input = document.createElement('input');
+            input.setAttribute('type', 'date');
+            if (input.type == 'text') {
+                var picker = $('.datepicker').datepicker();
+                getDate = function() {
+                    var date = picker.datepicker('getDate');
+                    return $.datepicker.formatDate('yy-mm-dd', date);
+                };
+            }
+        })();
+
+        task.find('.options form').on('submit', function() {
+            var element = {};
+            element.id = $(this).closest('.task').data('id');
+            element.deadline = getDate();
+            updateElements(element);
+            $(this).closest('.options').remove();
+            return false;
+        });
+
+        return false;
+    });
 });
 
 function editTitle(li) {
