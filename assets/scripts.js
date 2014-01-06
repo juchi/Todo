@@ -34,47 +34,91 @@ jQuery(function($){
         return false;
     });
     $('.task .edit').on('click', function() {
-        var html = $('#task-options').html();
-        var task = $(this).closest('.task').append(html);
-        var getDate = function() {
-            return $('#deadline').val();
-        };
-
-        (function() {
-            var input = document.createElement('input');
-            input.setAttribute('type', 'date');
-            if (input.type == 'text') {
-                var picker = $('.datepicker').datepicker();
-                getDate = function() {
-                    var date = picker.datepicker('getDate');
-                    return $.datepicker.formatDate('yy-mm-dd', date);
-                };
-            }
-        })();
-
-        task.find('.options form').on('submit', function() {
-            var element = {};
-            element.id = $(this).closest('.task').data('id');
-            element.deadline = getDate();
-            updateElements(element);
-            $(this).closest('.options').remove();
-            return false;
-        });
-
+        taskEdit($(this));
         return false;
     });
 
     // check outdated tasks
     $('.task').each(function() {
-        var $this = $(this);
-        if ($this.data('deadline')) {
-            var timestamp = Date.parse($this.data('deadline'));
-            if (timestamp < Date.now()) {
-                $this.addClass('outdated');
-            }
-        }
+        var task = $(this);
+        checkOutdated(task);
     });
 });
+
+function checkOutdated(task) {
+    if (task.data('deadline')) {
+        var timestamp = Date.parse(task.data('deadline'));
+        if (timestamp < Date.now()) {
+            task.addClass('outdated');
+            return;
+        }
+    }
+    task.removeClass('outdated');
+}
+
+var taskEditing = false;
+function taskEdit(editButton) {
+    var task = editButton.closest('.task');
+    if (taskEditing) {
+        stopTaskEditing(task.find('form'));
+        return;
+    }
+    taskEditing = true;
+
+    var html = '<div class="options">'+
+        '<form action="#" method="post">'+
+            '<label for="deadline">What is your deadline ?</label>'+
+            '<input type="date" name="deadline" class="datepicker" id="deadline"/>'+
+            '<input type="submit" value="Update"/>'+
+            '<button type="button" class="discard">Discard</button>'+
+        '</form>'+
+    '</div>';
+    task.append(html);
+    var getDate = function() {
+        return $('#deadline').val();
+    };
+    var setDate = function(date) {
+        $('#deadline').val();
+    };
+
+    (function() {
+        var input = document.createElement('input');
+        input.setAttribute('type', 'date');
+        if (input.type == 'text') {
+            var picker = $('.datepicker').datepicker();
+            getDate = function() {
+                var date = picker.datepicker('getDate');
+                return $.datepicker.formatDate('yy-mm-dd', date);
+            };
+            setDate = function(date) {
+                date = new Date(date);
+                $('.datepicker').first().datepicker('setDate', date);
+            };
+        }
+    })();
+
+    setDate(task.data('deadline'));
+
+    task.find('.discard').on('click', function() {
+        var form = $(this).closest('form');
+        stopTaskEditing(form);
+    });
+    task.find('.options form').on('submit', function() {
+        var element = {};
+        element.id = $(this).closest('.task').data('id');
+        element.deadline = getDate();
+        task.data('deadline', element.deadline);
+        checkOutdated(task);
+        updateElements(element);
+        stopTaskEditing($(this));
+        return false;
+    });
+}
+
+function stopTaskEditing(form) {
+    form.closest('.options').remove();
+    taskEditing = false;
+}
 
 function editTitle(li) {
     li.find('.view').hide();
