@@ -46,24 +46,24 @@ jQuery(function($){
 });
 
 function checkOutdated(task) {
-    if (task.data('deadline')) {
-        var timestamp = Date.parse(task.data('deadline'));
-        if (timestamp < Date.now()) {
-            task.addClass('outdated');
-            return;
-        }
+    if (task.data('deadline') && task.data('deadline') < Date.now()) {
+        task.addClass('outdated');
+    } else {
+        task.removeClass('outdated');
     }
-    task.removeClass('outdated');
 }
 
 var taskEditing = false;
 function taskEdit(editButton) {
     var task = editButton.closest('.task');
     if (taskEditing) {
-        stopTaskEditing(task.find('form'));
-        return;
+        var oldId = taskEditing;
+        stopTaskEditing($('#todo'+taskEditing));
+        if (oldId == task.data('id')) {
+            return;
+        }
     }
-    taskEditing = true;
+    taskEditing = task.data('id');
 
     var html = '<div class="options">'+
         '<form action="#" method="post">'+
@@ -78,7 +78,7 @@ function taskEdit(editButton) {
         return $('#deadline').val();
     };
     var setDate = function(date) {
-        $('#deadline').val();
+        $('#deadline').val(date);
     };
 
     (function() {
@@ -100,23 +100,22 @@ function taskEdit(editButton) {
     setDate(task.data('deadline'));
 
     task.find('.discard').on('click', function() {
-        var form = $(this).closest('form');
-        stopTaskEditing(form);
+        stopTaskEditing(task);
     });
     task.find('.options form').on('submit', function() {
         var element = {};
         element.id = $(this).closest('.task').data('id');
-        element.deadline = getDate();
+        element.deadline = new Date(getDate());
         task.data('deadline', element.deadline);
         checkOutdated(task);
         updateElements(element);
-        stopTaskEditing($(this));
+        stopTaskEditing(task);
         return false;
     });
 }
 
-function stopTaskEditing(form) {
-    form.closest('.options').remove();
+function stopTaskEditing(task) {
+    task.find('.options').remove();
     taskEditing = false;
 }
 

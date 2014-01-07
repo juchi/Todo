@@ -8,7 +8,7 @@
                     data-id="<%= todo.id %>"
                     data-timezone="<%= todo.timezone %>"
                     <% if (todo.deadline) { %>
-                    data-deadline="<%= todo.deadline.toISOString().substr(0, 10) %>"
+                    data-deadline="<%= todo.deadline.getTime() %>"
                     <% } %>>
                     <div class="view">
                         <span class="title"><%= todo.title %></span>
