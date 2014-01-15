@@ -97,6 +97,9 @@ header .user-box {
     background:#FFFCF5;
     padding: 5px 0 5px 10px;
 }
+.task .options button {
+    margin:0 0 0 5px;
+}
 .task.outdated {
     background:#F99;
     padding-left:30px;

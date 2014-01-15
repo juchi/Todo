@@ -68,9 +68,11 @@ function taskEdit(editButton) {
     var html = '<div class="options">'+
         '<form action="#" method="post">'+
             '<label for="deadline">What is your deadline ?</label>'+
-            '<input type="date" name="deadline" class="datepicker" id="deadline"/>'+
-            '<input type="submit" value="Update"/>'+
-            '<button type="button" class="discard">Discard</button>'+
+            '<div>'+
+                '<input type="date" name="deadline" class="datepicker" id="deadline"/>'+
+                '<button type="submit">Update</button>'+
+                '<button type="button" class="discard">Discard</button>'+
+            '</div>'+
         '</form>'+
     '</div>';
     task.append(html);
