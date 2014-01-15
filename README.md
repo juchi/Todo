@@ -7,11 +7,13 @@ Todo lists managing tool using node.js on the server side
 
 ### Node modules
 
-This project relies on node.js to be executed, and a few modules available on npm.
-To get started with it, clone the repository and run the following lines :
+This project relies on node.js to be executed, and a few modules available through npm.
+To get started with it, just run the following lines :
 
 ```
-npm install express ejs mysql
+git clone https://github.com/juchi/Todo.git todo
+cd todo/
+npm install
 ```
 
 ### Database
