@@ -24,38 +24,13 @@ function index(req, res, session) {
 function insert(req, res, session) {
     var user = session.getUser();
     var todo = {id:null, title:req.body.task, timezone:req.body.timezone};
-    task.addTask(todo, user, function() {
-        res.setHeader('Location', '/');
-        res.send(302, '');
-    });
+    task.addTask(todo, user, function() {sendSuccessResponse(req, res);});
 }
 
 function update(req, res, session) {
-    var callbacks = 1, done = 0;
     var user = session.getUser();
     var data = JSON.parse(req.body.data);
-    var id;
-    task.updateTask(data, user, end);
-    if (id = req.body.task_updated) {
-        callbacks++;
-        task.updateTask({id:id,created_at:new Date()}, user, end);
-    }
-
-    function end() {
-        if (callbacks == ++done) {
-            sendResponse();
-        }
-    }
-
-    function sendResponse() {
-        if (req.xhr) {
-            res.setHeader('Content-Type', 'text/plain');
-            res.send(200, '');
-        } else {
-            res.setHeader('Location', '/');
-            res.send(302, '');
-        }
-    }
+    task.updateTask(data, user, function(){sendSuccessResponse(req, res);});
 }
 
 function deleteTask(req, res, session) {
@@ -64,15 +39,17 @@ function deleteTask(req, res, session) {
     if (id == undefined) {
         id = req.query.id;
     }
-    task.removeTask(id, user, function(){
-        if (req.xhr) {
-            res.setHeader('Content-Type', 'text/plain');
-            res.send(200, '');
-        } else {
-            res.setHeader('Location', '/');
-            res.send(302, '');
-        }
-    });
+    task.removeTask(id, user, function(){sendSuccessResponse(req, res);});
+}
+
+function sendSuccessResponse(req, res) {
+    if (req.xhr) {
+        res.setHeader('Content-Type', 'text/plain');
+        res.send(200, '');
+    } else {
+        res.setHeader('Location', '/');
+        res.send(302, '');
+    }
 }
 
 exports.getRoutes = getRoutes;

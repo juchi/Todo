@@ -41,6 +41,7 @@ CREATE TABLE `task` (
   `title` varchar(255) NOT NULL DEFAULT '',
   `position` int(11) NOT NULL DEFAULT '0',
   `timezone` int(11) NOT NULL,
+  `deadline` date,
   `created_at` datetime NOT NULL,
   `user_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),

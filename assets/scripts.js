@@ -21,7 +21,7 @@ jQuery(function($){
                     timezone:sectionTimezone
                 });
             });
-            updateElements(data, taskUpdated);
+            updateElements(data);
         }
     });
 
@@ -107,7 +107,9 @@ function taskEdit(editButton) {
     task.find('.options form').on('submit', function() {
         var element = {};
         element.id = $(this).closest('.task').data('id');
-        element.deadline = new Date(getDate());
+        var date = new Date(getDate());
+        date = date.toJSON().split('T')[0];
+        element.deadline = date;
         task.data('deadline', element.deadline);
         checkOutdated(task);
         updateElements(element);
@@ -158,12 +160,11 @@ function deleteElement(index) {
     });
 }
 
-function updateElements(elements, taskUpdated) {
+function updateElements(elements) {
     jQuery.ajax('/update', {
         type: 'POST',
         data: {
-            'data':JSON.stringify(elements),
-            'task_updated':taskUpdated
+            'data':JSON.stringify(elements)
     }
     }).fail(function() {
         displayErrorMessage('Unable to update the items.');
